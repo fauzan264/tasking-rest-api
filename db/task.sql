@@ -18,8 +18,8 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
-DROP TABLE IF EXISTS `task`;
-CREATE TABLE `task` (
+DROP TABLE IF EXISTS `tasks`;
+CREATE TABLE `tasks` (
   `id` varchar(50) NOT NULL,
   `task` varchar(50) NOT NULL,
   `assign` varchar(50) NOT NULL,
