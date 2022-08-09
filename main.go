@@ -1,11 +1,11 @@
 package main
 
 import (
-	"fmt"
 	"log"
+	"tasking-rest-api/handler"
 	"tasking-rest-api/task"
 
-	"github.com/google/uuid"
+	"github.com/gin-gonic/gin"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -22,22 +22,12 @@ func main() {
 
 	taskService := task.NewService(taskRepository)
 
-	var id uuid.UUID = uuid.MustParse("a15601a8-e41d-4281-969a-f5c991c44346")
-	tasks, _ := taskService.FindTasks(id)
+	taskHandler := handler.NewTaskHandler(taskService)
 
-	// if err != nil {
-	// 	log.Fatal(err.Error())
-	// }
+	router := gin.Default()
+	api := router.Group("/api/v1")
 
-	fmt.Println("debug")
-	fmt.Println(len(tasks))
-	// for _, task := range tasks {
-	// 	fmt.Println(task.Assign)
-	// }
+	api.GET("/tasks", taskHandler.GetTasks)
 
-	// router := gin.Default()
-	// api := router.Group("/api/v1")
-
-	// api.GET("/", taskHandler.)
-	// router.Run()
+	router.Run()
 }

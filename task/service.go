@@ -3,7 +3,7 @@ package task
 import "github.com/google/uuid"
 
 type Service interface {
-	FindTasks(Id uuid.UUID) ([]Task, error)
+	GetTasks(Id string) ([]Task, error)
 }
 
 type service struct {
@@ -14,9 +14,10 @@ func NewService(repository Repository) *service {
 	return &service{repository}
 }
 
-func (s *service) FindTasks(Id uuid.UUID) ([]Task, error) {
-	if Id != uuid.Nil {
-		tasks, err := s.repository.FindByTaskID(Id)
+func (s *service) GetTasks(Id string) ([]Task, error) {
+
+	if Id != "" {
+		tasks, err := s.repository.FindByTaskID(uuid.MustParse(Id))
 		if err != nil {
 			return tasks, err
 		}
