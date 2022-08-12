@@ -42,7 +42,24 @@ func (h *taskHandler) GetTasks(c *gin.Context) {
 }
 
 func (h *taskHandler) GetTask(c *gin.Context) {
+	var input task.GetTaskDetailInput
 
+	err := c.ShouldBindUri(&input)
+	if err != nil {
+		response := helper.APIResponse("Failed to get detail of task", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	taskDetail, err := h.service.GetTaskById(input)
+	if err != nil {
+		response := helper.APIResponse("Failed to get detail of task not id", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := helper.APIResponse("Task detail", http.StatusOK, "success", task.FormatDetailTask(taskDetail))
+	c.JSON(http.StatusOK, response)
 }
 
 func (h *taskHandler) CreateTask(c *gin.Context) {

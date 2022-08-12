@@ -8,6 +8,7 @@ import (
 
 type Service interface {
 	GetTasks(Id string) ([]Task, error)
+	GetTaskById(input GetTaskDetailInput) (Task, error)
 	CreateTask(input CreateTaskInput) (Task, error)
 }
 
@@ -62,4 +63,15 @@ func (s *service) CreateTask(input CreateTaskInput) (Task, error) {
 	}
 
 	return newTask, nil
+}
+
+func (s *service) GetTaskById(input GetTaskDetailInput) (Task, error) {
+
+	task, err := s.repository.FindById(uuid.MustParse(input.Id))
+
+	if err != nil {
+		return task, err
+	}
+
+	return task, nil
 }

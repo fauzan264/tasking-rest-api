@@ -41,6 +41,8 @@ func main() {
 	api := router.Group("/api/v1")
 
 	api.GET("/tasks", taskHandler.GetTasks)
+	api.GET("/task/:id", taskHandler.GetTask)
 	api.POST("/tasks", taskHandler.CreateTask)
+
 	router.Run()
 }
