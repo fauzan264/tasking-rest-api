@@ -1,18 +1,15 @@
 package task
 
 import (
-	"time"
-
 	"github.com/google/uuid"
 )
 
 type TaskFormatter struct {
-	Id        uuid.UUID `json:"id"`
-	Task      string    `json:"task"`
-	Assign    string    `json:"assign"`
-	Status    int       `json:"status"`
-	Deadline  time.Time `json:"deadline"`
-	CreatedAt time.Time `json:"created_at"`
+	Id       uuid.UUID `json:"id"`
+	Task     string    `json:"task"`
+	Assign   string    `json:"assign"`
+	Status   int       `json:"status"`
+	Deadline string    `json:"deadline"`
 }
 
 func FormatTask(task Task) TaskFormatter {
@@ -22,7 +19,6 @@ func FormatTask(task Task) TaskFormatter {
 	taskFormatter.Assign = task.Assign
 	taskFormatter.Status = task.Status
 	taskFormatter.Deadline = task.Deadline
-	taskFormatter.CreatedAt = task.CreatedAt
 
 	return taskFormatter
 }

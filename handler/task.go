@@ -20,11 +20,13 @@ func NewTaskHandler(service task.Service) *taskHandler {
 func (h *taskHandler) GetTasks(c *gin.Context) {
 	id := c.Query("id")
 
-	_, err := uuid.Parse(id)
-	if err != nil {
-		response := helper.APIResponse("Error to get tasks, ID not valid", http.StatusBadRequest, "error", task.FormatTasks(nil))
-		c.JSON(http.StatusBadRequest, response)
-		return
+	if len(id) != 0 {
+		_, err := uuid.Parse(id)
+		if err != nil {
+			response := helper.APIResponse("Error to get tasks, ID not valid", http.StatusBadRequest, "error", task.FormatTasks(nil))
+			c.JSON(http.StatusBadRequest, response)
+			return
+		}
 	}
 
 	tasks, err := h.service.GetTasks(id)
@@ -36,5 +38,33 @@ func (h *taskHandler) GetTasks(c *gin.Context) {
 	}
 
 	response := helper.APIResponse("List of tasks", http.StatusOK, "success", task.FormatTasks(tasks))
+	c.JSON(http.StatusOK, response)
+}
+
+func (h *taskHandler) GetTask(c *gin.Context) {
+
+}
+
+func (h *taskHandler) CreateTask(c *gin.Context) {
+	var input task.CreateTaskInput
+
+	err := c.ShouldBindJSON(&input)
+	if err != nil {
+		errors := helper.FormatValidationError(err)
+		errorMessage := gin.H{"errors": errors}
+
+		response := helper.APIResponse("Failed to create task", http.StatusUnprocessableEntity, "error", errorMessage)
+		c.JSON(http.StatusUnprocessableEntity, response)
+		return
+	}
+
+	newtask, err := h.service.CreateTask(input)
+	if err != nil {
+		response := helper.APIResponse("Failed to create task", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := helper.APIResponse("Success to create task", http.StatusOK, "success", task.FormatTask(newtask))
 	c.JSON(http.StatusOK, response)
 }

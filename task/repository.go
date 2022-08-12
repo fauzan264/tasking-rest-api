@@ -8,6 +8,7 @@ import (
 type Repository interface {
 	FindAll() ([]Task, error)
 	FindByTaskID(Id uuid.UUID) ([]Task, error)
+	Save(task Task) (Task, error)
 }
 
 type repository struct {
@@ -37,4 +38,13 @@ func (r *repository) FindByTaskID(Id uuid.UUID) ([]Task, error) {
 	}
 	return tasks, nil
 
+}
+
+func (r *repository) Save(task Task) (Task, error) {
+	err := r.db.Create(&task).Error
+	if err != nil {
+		return task, err
+	}
+
+	return task, nil
 }
