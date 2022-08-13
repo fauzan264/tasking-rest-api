@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"tasking-rest-api/helper"
 	"tasking-rest-api/task"
@@ -83,5 +84,71 @@ func (h *taskHandler) CreateTask(c *gin.Context) {
 	}
 
 	response := helper.APIResponse("Success to create task", http.StatusOK, "success", task.FormatTask(newtask))
+	c.JSON(http.StatusOK, response)
+}
+
+func (h *taskHandler) UpdateData(c *gin.Context) {
+	var inputId task.GetTaskDetailInput
+
+	err := c.ShouldBindUri(&inputId)
+	if err != nil {
+		response := helper.APIResponse("Failed to update task, but id not found", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+	fmt.Println(inputId)
+
+	var inputData task.CreateTaskInput
+	err = c.ShouldBindJSON(&inputData)
+	if err != nil {
+		errorData := helper.FormatValidationError(err)
+		errorMessage := gin.H{"error": errorData}
+
+		response := helper.APIResponse("Failed to update task, wrong data", http.StatusUnprocessableEntity, "error", errorMessage)
+		c.JSON(http.StatusUnprocessableEntity, response)
+		return
+	}
+	fmt.Println(inputData)
+
+	updateTask, err := h.service.UpdateData(inputId, inputData)
+	if err != nil {
+		response := helper.APIResponse("Failed to update task", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := helper.APIResponse("Success to update task", http.StatusOK, "success", task.FormatTask(updateTask))
+	c.JSON(http.StatusOK, response)
+}
+
+func (h *taskHandler) UpdateDataStatus(c *gin.Context) {
+	var inputId task.GetTaskDetailInput
+
+	err := c.ShouldBindUri(&inputId)
+	if err != nil {
+		response := helper.APIResponse("Failed to update task status 1", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	var inputData task.CreateTaskStatusInput
+	err = c.ShouldBindJSON(&inputData)
+	if err != nil {
+		errorData := helper.FormatValidationError(err)
+		errorMessage := gin.H{"error": errorData}
+
+		response := helper.APIResponse("Failed to update task status", http.StatusUnprocessableEntity, "error", errorMessage)
+		c.JSON(http.StatusUnprocessableEntity, response)
+		return
+	}
+
+	updateTask, err := h.service.UpdateDataStatus(inputId, inputData)
+	if err != nil {
+		response := helper.APIResponse("Failed to update task status", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	response := helper.APIResponse("Success to update task", http.StatusOK, "success", task.FormatTask(updateTask))
 	c.JSON(http.StatusOK, response)
 }

@@ -10,6 +10,8 @@ type Repository interface {
 	FindByTaskID(Id uuid.UUID) ([]Task, error)
 	FindById(Id uuid.UUID) (Task, error)
 	Save(task Task) (Task, error)
+	UpdateData(task Task) (Task, error)
+	UpdateDataStatus(task Task) (Task, error)
 }
 
 type repository struct {
@@ -54,6 +56,26 @@ func (r *repository) FindById(Id uuid.UUID) (Task, error) {
 	var task Task
 
 	err := r.db.Where("id = ?", Id).Find(&task).Error
+
+	if err != nil {
+		return task, err
+	}
+
+	return task, nil
+}
+
+func (r *repository) UpdateData(task Task) (Task, error) {
+	err := r.db.Save(&task).Error
+
+	if err != nil {
+		return task, err
+	}
+
+	return task, nil
+}
+
+func (r *repository) UpdateDataStatus(task Task) (Task, error) {
+	err := r.db.Model(&task).Where("id = ?", task.Id).Update("status", task.Status).Error
 
 	if err != nil {
 		return task, err

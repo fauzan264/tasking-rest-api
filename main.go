@@ -43,6 +43,8 @@ func main() {
 	api.GET("/tasks", taskHandler.GetTasks)
 	api.GET("/task/:id", taskHandler.GetTask)
 	api.POST("/tasks", taskHandler.CreateTask)
+	api.PUT("/task/:id", taskHandler.UpdateData)
+	api.PUT("/status/:id", taskHandler.UpdateDataStatus)
 
 	router.Run()
 }

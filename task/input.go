@@ -9,3 +9,7 @@ type CreateTaskInput struct {
 	Assign   string `json:"assign" binding:"required"`
 	Deadline string `json:"deadline" binding:"required"`
 }
+
+type CreateTaskStatusInput struct {
+	Status int `json:"status" binding:"required"`
+}

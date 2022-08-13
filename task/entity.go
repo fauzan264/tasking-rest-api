@@ -14,3 +14,8 @@ type Task struct {
 	Deadline  string
 	CreatedAt time.Time
 }
+
+type TaskStatus struct {
+	Id     uuid.UUID
+	Status int
+}
