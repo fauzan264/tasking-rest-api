@@ -89,7 +89,8 @@ func (s *service) UpdateData(Id GetTaskDetailInput, InputData CreateTaskInput) (
 	task.Task = InputData.Task
 	task.Assign = InputData.Assign
 
-	deadline, err := time.Parse("2006-01-02T15:04:05.000Z", InputData.Deadline)
+	// deadline, err := time.Parse("2006-01-02T15:04:05.000Z", InputData.Deadline)
+	deadline, err := time.Parse("2006-01-02", InputData.Deadline)
 	if err != nil {
 		return task, err
 	}

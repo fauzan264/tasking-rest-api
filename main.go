@@ -23,19 +23,6 @@ func main() {
 	taskService := task.NewService(taskRepository)
 	taskHandler := handler.NewTaskHandler(taskService)
 
-	// input := task.CreateTaskInput{}
-	// input.Task = "Belajar Python programming"
-	// input.Assign = "Ahmad"
-
-	// deadlineTask, _ := time.Parse("2006-01-02", "2022-08-07")
-	// input.Deadline = deadlineTask
-
-	// fmt.Println(input)
-	// _, err = taskService.CreateTask(input)
-	// if err != nil {
-	// 	log.Fatal(err.Error())
-	// }
-
 	router := gin.Default()
 	router.Use(cors.Default())
 	api := router.Group("/api/v1")

@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 	"tasking-rest-api/helper"
 	"tasking-rest-api/task"
@@ -96,7 +95,6 @@ func (h *taskHandler) UpdateData(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
-	fmt.Println(inputId)
 
 	var inputData task.CreateTaskInput
 	err = c.ShouldBindJSON(&inputData)
@@ -108,7 +106,6 @@ func (h *taskHandler) UpdateData(c *gin.Context) {
 		c.JSON(http.StatusUnprocessableEntity, response)
 		return
 	}
-	fmt.Println(inputData)
 
 	updateTask, err := h.service.UpdateData(inputId, inputData)
 	if err != nil {
@@ -126,7 +123,7 @@ func (h *taskHandler) UpdateDataStatus(c *gin.Context) {
 
 	err := c.ShouldBindUri(&inputId)
 	if err != nil {
-		response := helper.APIResponse("Failed to update task status 1", http.StatusBadRequest, "error", nil)
+		response := helper.APIResponse("Failed to update task status", http.StatusBadRequest, "error", nil)
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
